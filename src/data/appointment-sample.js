@@ -4,7 +4,7 @@ export const events = [
       gender: "male",
       age: "28",
       title: 'Appointment with Muneer', 
-      start: '2021-07-01T10:30:00',
+      start: '2021-07-01T10:30:00',  
       end: '2021-07-01T11:30:00',
     },
     {

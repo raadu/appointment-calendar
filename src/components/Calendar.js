@@ -1,12 +1,30 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import {events} from '../data/appointment-sample';
 import {useLocation, useParams} from 'react-router-dom';
+import Modal from "react-modal";
+import AppointmentForm from './AppointmentForm';
 
 const Calendar = () => {
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      // height: '90vh',
+      // width: '90vw',
+    },
+    overlay: {zIndex: 1000}
+  };
+
+  // States
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Router Location
   const location = useLocation();
@@ -40,8 +58,21 @@ const Calendar = () => {
         console.log("clickinfo", clickInfo);
     }
 
+    // Open Modal Function
+    const openModal = () => {
+      setModalOpen(true);
+    };
+
+    // Close Modal Function
+    const closeModal = () => {
+      setModalOpen(false);
+    };
+
     return (
       <div>
+        <button onClick={openModal}>Add Appointment</button>
+        
+        
         {events ?
           <FullCalendar
             plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
@@ -68,6 +99,17 @@ const Calendar = () => {
             :
           <div>Loading</div>
         }
+
+        {modalOpen && (
+          <Modal 
+            isOpen={true} 
+            onRequestClose={closeModal} 
+            ariaHideApp={false}
+            style={customStyles}
+          >
+            <AppointmentForm/>
+          </Modal>
+        )}
       </div>
     );
 }
