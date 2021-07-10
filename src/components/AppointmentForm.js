@@ -6,6 +6,17 @@ import moment from 'moment';
 import {useDispatch} from 'react-redux';
 import {add_appointment} from '../redux/appointment/appointmentActions';
 import uuid from 'react-uuid';
+import {
+    FormWrapper,
+    Header,
+    ListItem,
+    ListContainer,
+    AddButton,
+    Input,
+    Label,
+    genderContainer,
+    genderList,
+} from '../styles/AppointFormStyles';
 
 const AppointmentForm = () => {
     // States
@@ -63,12 +74,13 @@ const AppointmentForm = () => {
     };
 
     return (
-        <div>
+        <FormWrapper>
+            <Header>Create New Appointment</Header>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <ul>
-                    <li>
-                        <label>Title</label>
-                        <input
+                <ListContainer>
+                    <ListItem>
+                        <Label>Title</Label>
+                        <Input
                             name="title"
                             type="text"
                             placeholder="Appointment of..."
@@ -78,10 +90,10 @@ const AppointmentForm = () => {
                                 maxLength: 100,
                             })}
                         />
-                    </li>
-                    <li>
-                        <label>Name</label>
-                        <input
+                    </ListItem>
+                    <ListItem>
+                        <Label>Name</Label>
+                        <Input
                             name="name"
                             type="text"
                             placeholder="Patient Name"
@@ -91,10 +103,10 @@ const AppointmentForm = () => {
                                 maxLength: 45,
                             })}
                         />
-                    </li>
-                    <li>
-                        <label>Age</label>
-                        <input
+                    </ListItem>
+                    <ListItem>
+                        <Label>Age</Label>
+                        <Input
                             name="age"
                             type="number"
                             required
@@ -103,39 +115,39 @@ const AppointmentForm = () => {
                                 maxLength: 3,
                             })}
                         />
-                    </li>
-                    <li>
-                        <label>Gender</label>
-                        <input
-                            type="radio"
-                            id="male"
-                            name="gender"
-                            value="male"
-                            required
-                            {...register("gender")}
-                        />
-                        <label htmlFor="male">Male</label>
-                        <br />
-                        <input
-                            type="radio"
-                            id="female"
-                            name="gender"
-                            value="female"
-                            {...register("gender")}
-                        />
-                        <label htmlFor="female">Female</label>
-                        <br />
-                        <input
-                            type="radio"
-                            id="other"
-                            name="gender"
-                            value="other"
-                            {...register("gender")}
-                        />
-                        <label htmlFor="other">Other</label>
-                        <br />
-                    </li>
-                    <li>
+                    </ListItem>
+                    <ListItem>
+                        <Label>Gender</Label>
+                        <genderContainer>
+                            <Input
+                                type="radio"
+                                id="male"
+                                name="gender"
+                                value="male"
+                                required
+                                {...register("gender")}
+                            />
+                            <Label htmlFor="male">Male</Label>
+                            <Input
+                                type="radio"
+                                id="female"
+                                name="gender"
+                                value="female"
+                                {...register("gender")}
+                            />
+                            <Label htmlFor="female">Female</Label>
+                            <Input
+                                type="radio"
+                                id="other"
+                                name="gender"
+                                value="other"
+                                {...register("gender")}
+                            />
+                            <Label htmlFor="other">Other</Label>
+                        </genderContainer>
+                    </ListItem>
+                    <ListItem>
+                        <Label>Date</Label>
                         <div>
                             <DatePicker
                                 onChange={onChangeDate}
@@ -143,21 +155,22 @@ const AppointmentForm = () => {
                                 format="y-MM-d"
                             />
                         </div> 
-                    </li>
-                    <li>
+                    </ListItem>
+                    <ListItem>
+                        <Label>Time</Label>    
                         <div>
                             <TimeRangePicker
                                 onChange={onChangeTime}
                                 value={selectedTime}
                             />
                         </div>
-                    </li>
-                    <li>
-                        <button type="submit">Add To Calendar</button>
-                    </li>
-                </ul>
+                    </ListItem>
+                    <ListItem>
+                        <AddButton type="submit">Add To Calendar</AddButton>
+                    </ListItem>
+                </ListContainer>
             </form>
-        </div>
+        </FormWrapper>
     );
 };
 

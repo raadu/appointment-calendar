@@ -1,4 +1,7 @@
 import moment from "moment";
+import {
+    Title,
+} from '../styles/AppointmentDetailsStyles';
 
 const AppointmentDetails = ({selectedEvent}) => {
     const startDateTime = selectedEvent.start;
@@ -11,7 +14,7 @@ const AppointmentDetails = ({selectedEvent}) => {
         <div>
         {selectedEvent ? (
             <div>
-            <div>Title: {selectedEvent.title}</div>
+            <Title>{selectedEvent.title}</Title>
             <div>Name: {selectedEvent.name}</div>
             <div>Age: {selectedEvent.age}</div>
             <div>Gender: {selectedEvent.gender}</div>

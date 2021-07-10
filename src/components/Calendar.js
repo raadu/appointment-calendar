@@ -10,6 +10,8 @@ import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
 import AppointmentDetails from './AppointmentDetails';
 import { search_appointment } from '../redux/appointment/appointmentActions';
+import styled from 'styled-components';
+import {MainWrapper, ButtonContainer, Button, CloseButton} from '../styles/CalendarStyles';
 
 const Calendar = () => {
   const customStyles = {
@@ -84,37 +86,43 @@ const Calendar = () => {
     };
 
     return (
-      <div>
-        <button onClick={openForm}>Add Appointment</button>
+      <MainWrapper>
+        <ButtonContainer>
+          <Button onClick={openForm}>Add Appointment</Button>
+        </ButtonContainer>
+        <div>
+          {events ?
+            <FullCalendar
+              plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
+              headerToolbar={{
+                left: 'title',
+                // center: 'title',
+                right: 'prev,today,next'
+              }}
+              initialView="dayGridMonth"
+              initialDate={initialDate}
+              editable={true}
+              selectable={false}
+              selectMirror={true}
+              weekends={true}
+              initialEvents={events}
+              events={events}
+              eventClick={handleEventClick}
+              dateClick={handleEventClick}
+              views= {{
+                dayGrid: {
+                  dayMaxEventRows: 4
+                }
+              }}
+              height="90vh"
+            />
+              :
+            <div>Loading</div>
+          }
+        </div>
         
         
-        {events ?
-          <FullCalendar
-            plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
-            headerToolbar={{
-              left: 'prev,next',
-              center: 'title',
-              right: 'today'
-            }}
-            initialView="dayGridMonth"
-            initialDate={initialDate}
-            editable={true}
-            selectable={false}
-            selectMirror={true}
-            weekends={true}
-            initialEvents={events}
-            events={events}
-            eventClick={handleEventClick}
-            dateClick={handleEventClick}
-            views= {{
-              dayGrid: {
-                dayMaxEventRows: 4
-              }
-            }}
-          />
-            :
-          <div>Loading</div>
-        }
+        
 
         {modalOpen && (
           <Modal 
@@ -123,6 +131,7 @@ const Calendar = () => {
             ariaHideApp={false}
             style={customStyles}
           >
+            <CloseButton onClick={closeModal}>X</CloseButton>
             {selectedModal === "AppointmentForm" ? 
               <AppointmentForm/> : 
               selectedModal === "AppointmentDetails" ? 
@@ -131,7 +140,7 @@ const Calendar = () => {
             }
           </Modal>
         )}
-      </div>
+      </MainWrapper>
     );
 }
  
