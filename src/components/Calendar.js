@@ -8,13 +8,17 @@ import Modal from "react-modal";
 import AppointmentForm from './AppointmentForm';
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
+import {search_appointment} from '../redux/appointment/appointmentActions';
 import AppointmentDetails from './AppointmentDetails';
-import { search_appointment } from '../redux/appointment/appointmentActions';
-import styled from 'styled-components';
-import {MainWrapper, ButtonContainer, Button, CloseButton} from '../styles/CalendarStyles';
+import {
+  MainWrapper,
+  ButtonContainer,
+  Button, 
+  CloseButton
+} from '../styles/CalendarStyles';
 
 const Calendar = () => {
-  const customStyles = {
+  const customModalStyles = {
     content: {
       top: '50%',
       left: '50%',
@@ -22,16 +26,14 @@ const Calendar = () => {
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
-      // height: '90vh',
-      // width: '90vw',
     },
     overlay: {zIndex: 1000}
   };
 
   // States
   const [modalOpen, setModalOpen] = useState(false);
-  const events = useSelector(state => state.appointment.appointments);
   const [selectedModal, setSelectedModal] = useState("");
+  const events = useSelector(state => state.appointment.appointments);
   const selectedEvent = useSelector(state => state.appointment.selectedAppointment);
 
   //Assign useDispatch hook to a variable
@@ -46,18 +48,19 @@ const Calendar = () => {
   // Initial Date
   let initialDate = new Date().toISOString();
 
-  // Comdition for changing initial date from route params
-  if(location.pathname !== "/" && year>999 && year<10000) {
-    const parsedMonth = parseInt(monthDate.split("-")[0]);
-    const parsedDate = parseInt(monthDate.split("-")[1]);
-    const month = (parsedMonth > 0 && parsedMonth < 13) ? parsedMonth : null;
-    const date = (parsedDate > 0 && parsedDate < 31) ? parsedDate : null;
+    // Condition for changing initial date from router params
+    // When user added `/year/:year/month/:monthDate` path after route
+    if(location.pathname !== "/" && year>999 && year<10000) {
+      const parsedMonth = parseInt(monthDate.split("-")[0]);
+      const parsedDate = parseInt(monthDate.split("-")[1]);
+      const month = (parsedMonth > 0 && parsedMonth < 13) ? parsedMonth : null;
+      const date = (parsedDate > 0 && parsedDate < 31) ? parsedDate : null;
 
-    if(month && date) {
-      initialDate=`${year}-${month < 10 ? `0${month}` : month}-${date < 10 ? `0${date}` : date}T00:00:00`;
+      if(month && date) {
+        // Set up initial date to start the calendar
+        initialDate=`${year}-${month < 10 ? `0${month}` : month}-${date < 10 ? `0${date}` : date}T00:00:00`;
+      }
     }
-  }
-
 
     // Open appointment details when clicked on an event
     const handleEventClick = (clickInfo) => {
@@ -65,11 +68,10 @@ const Calendar = () => {
         dispatch(search_appointment(clickInfo.event._def.publicId));
         setSelectedModal("AppointmentDetails");
         openModal();
-          console.log("clickinfo", clickInfo.event);
       }
     }
 
-    // Open appoitment form
+    // Open appointment form
     const openForm = () => {
       setSelectedModal("AppointmentForm");
       openModal();
@@ -88,7 +90,9 @@ const Calendar = () => {
     return (
       <MainWrapper>
         <ButtonContainer>
-          <Button onClick={openForm}>Add Appointment</Button>
+          <Button onClick={openForm}>
+            Add Appointment
+          </Button>
         </ButtonContainer>
         <div>
           {events ?
@@ -96,17 +100,15 @@ const Calendar = () => {
               plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
               headerToolbar={{
                 left: 'title',
-                // center: 'title',
-                right: 'prev,today,next'
+                right: 'prevYear,prev,today,next,nextYear'
               }}
               initialView="dayGridMonth"
               initialDate={initialDate}
+              events={events}
               editable={true}
               selectable={false}
               selectMirror={true}
               weekends={true}
-              initialEvents={events}
-              events={events}
               eventClick={handleEventClick}
               dateClick={handleEventClick}
               views= {{
@@ -120,20 +122,17 @@ const Calendar = () => {
             <div>Loading</div>
           }
         </div>
-        
-        
-        
 
         {modalOpen && (
           <Modal 
-            isOpen={true} 
-            onRequestClose={closeModal} 
+            isOpen={true}
+            onRequestClose={closeModal}
             ariaHideApp={false}
-            style={customStyles}
+            style={customModalStyles}
           >
             <CloseButton onClick={closeModal}>X</CloseButton>
             {selectedModal === "AppointmentForm" ? 
-              <AppointmentForm/> : 
+              <AppointmentForm closeModal={closeModal}/> : 
               selectedModal === "AppointmentDetails" ? 
               <AppointmentDetails selectedEvent={selectedEvent}/> :
               null

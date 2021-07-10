@@ -10,10 +10,6 @@ export const add_appointment = (appointmentData) => dispatch => {
         payload: appointmentData,
     });
     return Promise.resolve();
-    // return {
-    //     type: ADD_APPOINTMENT,
-    //     payload: appointmentData,
-    // }
 }
 
 // search appointment with ID

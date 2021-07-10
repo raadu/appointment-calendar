@@ -14,11 +14,9 @@ import {
     AddButton,
     Input,
     Label,
-    genderContainer,
-    genderList,
 } from '../styles/AppointFormStyles';
 
-const AppointmentForm = () => {
+const AppointmentForm = ({closeModal}) => {
     // States
     const [startDateTime, setStartDateTime] = useState(new Date());
     const [endDateTime, setEndDateTime] = useState(new Date());
@@ -54,6 +52,7 @@ const AppointmentForm = () => {
         dispatch(add_appointment(appointmentInfo))
         .then(() => {
             console.log("form data: ", appointmentInfo);
+            // Check with localstorage data
             if("appointments" in localStorage) {
                 let localStorageArray = JSON.parse(localStorage.getItem('appointments'));
                 localStorageArray.push(appointmentInfo);
@@ -64,12 +63,18 @@ const AppointmentForm = () => {
                 newArray.push(appointmentInfo);
                 localStorage.setItem("appointments", JSON.stringify(newArray));
             }
+            // Reset react-hook-form states
             reset();
+            // Reset date picker and time picker
             setStartDateTime(new Date());
             setEndDateTime(new Date());
+            // Close modal
+            closeModal();
         })
         .catch((error) => {
             console.log(`Error getting data: ${error}`);
+            // Close modal
+            closeModal();
         });
     };
 
@@ -148,22 +153,18 @@ const AppointmentForm = () => {
                     </ListItem>
                     <ListItem>
                         <Label>Date</Label>
-                        <div>
                             <DatePicker
                                 onChange={onChangeDate}
                                 value={selectedDate}
                                 format="y-MM-d"
                             />
-                        </div> 
                     </ListItem>
                     <ListItem>
-                        <Label>Time</Label>    
-                        <div>
+                        <Label>Time</Label>
                             <TimeRangePicker
                                 onChange={onChangeTime}
                                 value={selectedTime}
                             />
-                        </div>
                     </ListItem>
                     <ListItem>
                         <AddButton type="submit">Add To Calendar</AddButton>

@@ -40,4 +40,3 @@ export const genderContainer = styled.div`
     display: flex;
     flex-direction: row;
 `;
-

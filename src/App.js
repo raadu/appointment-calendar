@@ -1,12 +1,12 @@
-import React, {useEffect} from "react";
+import React from "react";
 import Calendar from "./components/Calendar";
+import store from './redux/store';
+import {Provider} from 'react-redux';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
 } from "react-router-dom";
-import {Provider} from 'react-redux';
-import store from './redux/store';
 
 
 function App() {
@@ -16,14 +16,10 @@ function App() {
       <Router>
         <Switch>
             <Route exact path="/">
-              <div>
-                <Calendar/>
-              </div>
+              <Calendar/>
             </Route>
             <Route path="/year/:year/month/:monthDate">
-                <div>
-                  <Calendar/>
-                </div>
+                <Calendar/>
             </Route>
           </Switch>
       </Router>
