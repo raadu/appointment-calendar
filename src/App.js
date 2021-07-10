@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Calendar from "./components/Calendar";
 import {
   BrowserRouter as Router,
@@ -8,7 +8,9 @@ import {
 import {Provider} from 'react-redux';
 import store from './redux/store';
 
+
 function App() {
+
   return (
     <Provider store = {store}>
       <Router>

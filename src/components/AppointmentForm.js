@@ -40,12 +40,26 @@ const AppointmentForm = () => {
             end: endDateTime,
             id: uuid(),
         };
-        dispatch(add_appointment(appointmentInfo));
-        console.log("form data: ", appointmentInfo);
-        reset();
-        setStartDateTime(new Date());
-        setEndDateTime(new Date());
-
+        dispatch(add_appointment(appointmentInfo))
+        .then(() => {
+            console.log("form data: ", appointmentInfo);
+            if("appointments" in localStorage) {
+                let localStorageArray = JSON.parse(localStorage.getItem('appointments'));
+                localStorageArray.push(appointmentInfo);
+                localStorage.setItem('appointments', JSON.stringify(localStorageArray));
+            }
+            else {
+                let newArray = [];
+                newArray.push(appointmentInfo);
+                localStorage.setItem("appointments", JSON.stringify(newArray));
+            }
+            reset();
+            setStartDateTime(new Date());
+            setEndDateTime(new Date());
+        })
+        .catch((error) => {
+            console.log(`Error getting data: ${error}`);
+        });
     };
 
     return (

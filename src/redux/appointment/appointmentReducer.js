@@ -2,7 +2,7 @@ import {ADD_APPOINTMENT, SEARCH_APPOINTMENT} from './appointmentTypes';
 
 // Initial State
 const initialState = {
-    appointments: [],
+    appointments: localStorage.getItem('appointments') ? JSON.parse(localStorage.getItem('appointments')) : [],
     selectedAppointment: {},
 }
 

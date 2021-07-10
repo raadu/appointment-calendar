@@ -4,11 +4,16 @@ import {ADD_APPOINTMENT, SEARCH_APPOINTMENT} from "./appointmentTypes";
 
 // add_appointment action creator
 // function returns an action object
-export const add_appointment = (appointmentData) => {
-    return {
+export const add_appointment = (appointmentData) => dispatch => {
+    dispatch({
         type: ADD_APPOINTMENT,
         payload: appointmentData,
-    }
+    });
+    return Promise.resolve();
+    // return {
+    //     type: ADD_APPOINTMENT,
+    //     payload: appointmentData,
+    // }
 }
 
 // search appointment with ID

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -28,15 +28,12 @@ const Calendar = () => {
 
   // States
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedModal, setSelectedModal] = useState("");
   const events = useSelector(state => state.appointment.appointments);
+  const [selectedModal, setSelectedModal] = useState("");
   const selectedEvent = useSelector(state => state.appointment.selectedAppointment);
 
   //Assign useDispatch hook to a variable
   const dispatch = useDispatch();
-
-  console.log('selectedEvent: ', selectedEvent);
-  
 
   // Router Location
   const location = useLocation();
@@ -59,11 +56,6 @@ const Calendar = () => {
     }
   }
 
-    // Set task data to defaultValue state
-    useEffect(() => {
-      console.log("events fetched: ", events);
-    },[]); // eslint-disable-line react-hooks/exhaustive-deps
-
 
     // Open appointment details when clicked on an event
     const handleEventClick = (clickInfo) => {
@@ -71,7 +63,7 @@ const Calendar = () => {
         dispatch(search_appointment(clickInfo.event._def.publicId));
         setSelectedModal("AppointmentDetails");
         openModal();
-          console.log("clickinfo", clickInfo.event._def.publicId);
+          console.log("clickinfo", clickInfo.event);
       }
     }
 
