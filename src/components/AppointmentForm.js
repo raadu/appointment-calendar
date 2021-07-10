@@ -3,11 +3,17 @@ import {useForm} from "react-hook-form";
 import DatePicker from 'react-date-picker';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
 import moment from 'moment';
+import {useDispatch} from 'react-redux';
+import {add_appointment} from '../redux/appointment/appointmentActions';
+import uuid from 'react-uuid';
 
 const AppointmentForm = () => {
     // States
     const [startDateTime, setStartDateTime] = useState(new Date());
     const [endDateTime, setEndDateTime] = useState(new Date());
+
+    //Assign useDispatch hook to a variable
+    const dispatch = useDispatch();
 
     // useForm handler
     const { register, handleSubmit, reset } = useForm();
@@ -32,7 +38,9 @@ const AppointmentForm = () => {
             ...data,
             start: startDateTime,
             end: endDateTime,
+            id: uuid(),
         };
+        dispatch(add_appointment(appointmentInfo));
         console.log("form data: ", appointmentInfo);
         reset();
         setStartDateTime(new Date());

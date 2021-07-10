@@ -3,10 +3,13 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import {events} from '../data/appointment-sample';
 import {useLocation, useParams} from 'react-router-dom';
 import Modal from "react-modal";
 import AppointmentForm from './AppointmentForm';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
+import AppointmentDetails from './AppointmentDetails';
+import { search_appointment } from '../redux/appointment/appointmentActions';
 
 const Calendar = () => {
   const customStyles = {
@@ -25,6 +28,15 @@ const Calendar = () => {
 
   // States
   const [modalOpen, setModalOpen] = useState(false);
+  const [selectedModal, setSelectedModal] = useState("");
+  const events = useSelector(state => state.appointment.appointments);
+  const selectedEvent = useSelector(state => state.appointment.selectedAppointment);
+
+  //Assign useDispatch hook to a variable
+  const dispatch = useDispatch();
+
+  console.log('selectedEvent: ', selectedEvent);
+  
 
   // Router Location
   const location = useLocation();
@@ -53,9 +65,20 @@ const Calendar = () => {
     },[]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
-    // Open modal when clicked on an event
+    // Open appointment details when clicked on an event
     const handleEventClick = (clickInfo) => {
-        console.log("clickinfo", clickInfo);
+      if(clickInfo.event) {
+        dispatch(search_appointment(clickInfo.event._def.publicId));
+        setSelectedModal("AppointmentDetails");
+        openModal();
+          console.log("clickinfo", clickInfo.event._def.publicId);
+      }
+    }
+
+    // Open appoitment form
+    const openForm = () => {
+      setSelectedModal("AppointmentForm");
+      openModal();
     }
 
     // Open Modal Function
@@ -70,7 +93,7 @@ const Calendar = () => {
 
     return (
       <div>
-        <button onClick={openModal}>Add Appointment</button>
+        <button onClick={openForm}>Add Appointment</button>
         
         
         {events ?
@@ -88,6 +111,7 @@ const Calendar = () => {
             selectMirror={true}
             weekends={true}
             initialEvents={events}
+            events={events}
             eventClick={handleEventClick}
             dateClick={handleEventClick}
             views= {{
@@ -107,7 +131,12 @@ const Calendar = () => {
             ariaHideApp={false}
             style={customStyles}
           >
-            <AppointmentForm/>
+            {selectedModal === "AppointmentForm" ? 
+              <AppointmentForm/> : 
+              selectedModal === "AppointmentDetails" ? 
+              <AppointmentDetails selectedEvent={selectedEvent}/> :
+              null
+            }
           </Modal>
         )}
       </div>
