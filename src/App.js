@@ -7,23 +7,25 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-
+import {RootContainer} from './styles/AppStyles';
 
 function App() {
 
   return (
-    <Provider store = {store}>
-      <Router>
-        <Switch>
-            <Route exact path="/">
-              <Calendar/>
-            </Route>
-            <Route path="/year/:year/month/:monthDate">
+    <RootContainer>
+      <Provider store = {store}>
+        <Router>
+          <Switch>
+              <Route exact path="/">
                 <Calendar/>
-            </Route>
-          </Switch>
-      </Router>
-    </Provider>
+              </Route>
+              <Route path="/year/:year/month/:monthDate">
+                  <Calendar/>
+              </Route>
+            </Switch>
+        </Router>
+      </Provider>
+    </RootContainer>
   );
 }
 

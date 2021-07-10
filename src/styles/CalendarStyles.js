@@ -10,7 +10,6 @@ export const MainWrapper = styled.div`
 export const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  padding-top: 1rem;
 `;
 
 export const Button = styled.button`
